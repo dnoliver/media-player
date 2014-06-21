@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <title>YouTube Search</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container"> 
+            <div class="page-header">
+                <h1>YouTube Search <small>Search Something in youtube.com</small></h1>
+            </div>
+            <iframe class="youtube-player" type="text/html" src="http://www.youtube.com/embed/I4-0MecreqU" width="100%" height="400px" allowfullscreen frameborder="0">
+            </iframe>
+            <form role="form" class="youtube-search-form">
+                <div class="form-group">
+                    <label for="search-text">Search</label>
+                    <input type="text" class="form-control" id="search-text" placeholder="Text to search">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Results</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="media-list youtube-search-result">
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="URL.js"></script>
+        <script src="YoutubeSearch.js"></script>
+        <script>
+            $(document).ready(function(){
+                $(".youtube-search-form").submit(function(){
+                    $(".youtube-search-result").empty()
+                    
+                    var search = new YoutubeSearch();
+                    var textToSearch = $("#search-text").val();
+                    search.search( textToSearch , function(data) {
+                        data.items.forEach( function(item){
+                            console.log(item);
+                            var id = item.id.videoId;
+                            var title = item.snippet.title;
+                            var image = item.snippet.thumbnails.default.url;
+                            var description = item.snippet.description;
+     
+                            var thumbnail = $(
+                            '<li class="media">' +
+                                '<a class="pull-left" href="#">' +
+                                    '<img class="media-object" src="' + image + '" alt="...">' +
+                                '</a>' +
+                                '<div class="media-body">' +
+                                    '<h4 class="media-heding">'+ title +'</h4>' +
+                                    '<p>'+ description +'</p>' +
+                                '</div>' +
+                            '</li>'
+                            );
+                            
+                            thumbnail.click( function() {
+                                var embed = "http://www.youtube.com/embed/" + id;
+                                $(".youtube-player").attr("src",embed);
+                            });
+                            
+                            $(".youtube-search-result").append(thumbnail);
+                        });
+                    });
+                    return false;
+                });
+            });
+        </script>
+    </body>
+</html>

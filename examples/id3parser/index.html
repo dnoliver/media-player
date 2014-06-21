@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <title>ID3 Parser Example</title>
+    
+    <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../../bower_components/musicmetadata/dist/musicmetadata.js"></script>
+  </head>
+  <body>
+    <input id="file" type="file">
+    <div id="meta"></div>
+    
+    <script>
+      $(document).ready(function(){
+        var file = null;
+        var metadata = null;
+
+        $("#file").change(function(){
+          file = $("#file").get(0).files.item(0);
+
+          metadata = musicmetadata(file);
+          metadata.on('metadata',function(result){
+              console.log(result);
+          });
+        });  
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<head>
+  <title>File Selector examples</title>
+</head>
+<body>
+  <label>simple <input id="simple" type="file"></label>
+  <br>
+  <label>multiple <input id="multiple" type="file" multiple></label>
+  <br>
+  <label>folder <input id="folder" type="file" multiple webkitdirectory></label>
+  <br>
+  
+  <div id="drop_zone" style="border: 1px dashed black; height:100px;">drag and drop</div>
+  <output id="list"></output>
+
+  <script>
+    
+    function handleFileSelect(evt) {
+      var files = evt.target.files; // FileList object
+
+      // files is a FileList of File objects. List some properties.
+      var output = [];
+      for (var i = 0, f; f = files[i]; i++) {
+        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes, last modified: ',
+                    f.lastModifiedDate.toLocaleDateString(), '</li>');
+      }
+      document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+    }
+    
+    function handleFileDrop(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+
+      var files = evt.dataTransfer.files; // FileList object.
+
+      // files is a FileList of File objects. List some properties.
+      var output = [];
+      for (var i = 0, f; f = files[i]; i++) {
+        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes, last modified: ',
+                    f.lastModifiedDate.toLocaleDateString(), '</li>');
+      }
+      document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+    }
+
+    function handleDragOver(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    }
+
+    // Setup listeners
+    document.getElementById('simple').addEventListener('change', handleFileSelect, false);
+    document.getElementById('multiple').addEventListener('change', handleFileSelect, false);
+    document.getElementById('folder').addEventListener('change', handleFileSelect, false);
+    
+    // Setup the dnd listeners.
+    var dropZone = document.getElementById('drop_zone');
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', handleFileDrop, false);
+  </script>
+</body>
