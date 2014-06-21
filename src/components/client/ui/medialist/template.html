@@ -1,0 +1,16 @@
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <th>Name</th>
+      <th>URL</th>
+    </thead>
+    <tbody>
+      <% _.each(collection, function(model) { %> 
+        <tr>
+          <td><%= JSON.stringify(model.file.name) %></td>
+          <td><%= JSON.stringify(model.url) %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
